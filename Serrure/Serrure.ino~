@@ -1,6 +1,6 @@
 
 //alimentation du potentiometre
-const int pot = 4;
+const int pot = 6;
 
 //potentiometre branché sur ax analog
 
