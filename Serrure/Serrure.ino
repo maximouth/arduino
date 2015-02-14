@@ -8,12 +8,13 @@
 //alimentation du potentiometre
 const int pot = 6;
 const int ledV = 2;
-const int ledR = 3;
+const int ledR = 4;
 
 //ecran LCD
 LiquidCrystal lcd(1,3,5,6,7,8,9,10,11,12); //liaison 8 bits de données
 
 //potentiometre branché sur ax analog
+
 
 // les 4 valeurs du coffres
 int code[4] = {2,7,4,8};
@@ -44,6 +45,7 @@ void loop() {
   lcd.setCursor(0,2);
   lcd.print(val);
   delay(1);
+
 
   switch(cpt) {
   case 0:
@@ -90,12 +92,9 @@ void loop() {
     lcd.print(code[3]);
     
     break;
-    
-
-    
   }
 
-    if ((time2-time1) > TCOMB) {
+  if ((time2-time1) > TCOMB) {
       switch (cpt) {
 	//premier chiffre
       case 0:
@@ -156,7 +155,7 @@ int test() {
     lcd.setCursor(0,0);
     lcd.print("mauvaise entree");
     delay(500);
-    cpt == 0;
+    cpt = 0;
     time1 = millis();
     //return 0;
   }
