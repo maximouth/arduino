@@ -4,6 +4,8 @@
 // le code
 int code[4];
 
+//pour le clear
+int etat = 0;
 // valeur du potentiomatre
 int val = 0;
 //temps pour determiner les differants changements
@@ -25,62 +27,72 @@ void setup() {
 }
 
 void loop() {
-  lcd.clear();
+  //  lcd.clear();
   val = map(analogRead(1),0,1023,0,9);
   lcd.setCursor(0,2);
+  if (cpt != 4) {
   lcd.print(val);
+  }
   delay(1);
   time2 = millis();
 
-  switch(cpt) {
-  case 0:
-    lcd.setCursor(0,0);  
-    lcd.print("1er chiffre");
-    break;
-  case 1:
-    lcd.setCursor(0,0);  
-    lcd.print("2eme chiffre");
-    lcd.setCursor(4,1);
-    lcd.print(code[0]);
-    break;
-  case 2:
-    lcd.setCursor(0,0);  
-    lcd.print("3eme chiffre");
-    lcd.setCursor(4,1);
-    lcd.print(code[0]);
-    lcd.setCursor(6,1);
-    lcd.print(code[1]);
-    break;
-  case 3:
-    lcd.setCursor(0,0);  
-    lcd.print("4eme chiffre");
-    break;
-    lcd.setCursor(4,1);
-    lcd.print(code[0]);
-    lcd.setCursor(6,1);
-    lcd.print(code[1]);
-    lcd.setCursor(8,1);
-    lcd.print(code[2]);
-     case 4:
-    lcd.setCursor(0,0);
-    lcd.print("nouveau");
-    lcd.setCursor(0,1);
-    lcd.print("code:");
-    lcd.setCursor(6,1);
-    lcd.print(code[0]);
-    lcd.setCursor(8,1);
-    lcd.print(code[1]);
-    lcd.setCursor(10,1);
-    lcd.print(code[2]);
-    lcd.setCursor(12,1);
-    lcd.print(code[3]);
-    break;
-
+  if (etat == 0) {
+    switch(cpt) {
+    case 0:
+      lcd.clear();
+      lcd.setCursor(0,0);  
+      lcd.print("1er chiffre");
+      break;
+    case 1:
+      lcd.clear();
+      lcd.setCursor(0,0);  
+      lcd.print("2eme chiffre");
+      lcd.setCursor(4,1);
+      lcd.print(code[0]);
+      break;
+    case 2:
+      lcd.clear();
+      lcd.setCursor(0,0);  
+      lcd.print("3eme chiffre");
+      lcd.setCursor(4,1);
+      lcd.print(code[0]);
+      lcd.setCursor(6,1);
+      lcd.print(code[1]);
+      break;
+    case 3:
+      lcd.clear();
+      lcd.setCursor(0,0);  
+      lcd.print("4eme chiffre");
+      lcd.setCursor(4,1);
+      lcd.print(code[0]);
+      lcd.setCursor(6,1);
+      lcd.print(code[1]);
+      lcd.setCursor(8,1);
+      lcd.print(code[2]);
+      break;
+    case 4:
+      lcd.clear();
+      lcd.setCursor(0,0);
+      lcd.print("nouveau");
+      lcd.setCursor(0,1);
+      lcd.print("code:");
+      lcd.setCursor(6,1);
+      lcd.print(code[0]);
+      lcd.setCursor(8,1);
+      lcd.print(code[1]);
+      lcd.setCursor(10,1);
+      lcd.print(code[2]);
+      lcd.setCursor(12,1);
+      lcd.print(code[3]);
+      break;
+    }
+    etat = 1;
   }
   
   if (((time2-time1) > TCOMB) && (cpt < 4)) {
     code[cpt] = val;
     cpt++;
+    etat = 0;
     time1 = millis();
   }
   
