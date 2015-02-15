@@ -8,15 +8,19 @@
 //pour le clear
 int etat = 0;
 
+//pour le type
+int type = 0;
+
 //alimentation du potentiometre
 const int pot = 6;
-const int ledV = 2;
-const int ledR = 4;
+//const int ledV = 2;
+//const int ledR = 4;
 
 //ecran LCD
 LiquidCrystal lcd(1,3,5,6,7,8,9,10,11,12); //liaison 8 bits de données
 
 //potentiometre branché sur ax analog
+// intetup branchée sur 2
 
 
 // les 4 valeurs du coffres
@@ -36,13 +40,15 @@ void setup() {
   lcd.setCursor(0,0);
   //  digitalWrite(pot,HIGH);
   time1 = millis();
-  digitalWrite(ledR,HIGH);
-  digitalWrite(ledV,LOW);
+  //  digitalWrite(ledR,HIGH);
+  //  digitalWrite(ledV,LOW);
   attachInterrupt(0,change_etat,FALLING);
 }
 
 void loop() {
+  if (type == 0) {
   lcd.clear();
+  }
   val = map(analogRead(1),0,1023,0,9);
   time2 = millis();
   lcd.setCursor(0,2);
@@ -51,6 +57,7 @@ void loop() {
   }
   delay(1);
 
+  if (type == 0 ) {
   
     switch(cpt) {
     case 0:
@@ -107,26 +114,16 @@ void loop() {
       switch (cpt) {
 	//premier chiffre
       case 0:
-	/* lcd.setCursor(0,0); */
-	/* lcd.clear(); */
-	/* lcd.print("1er chiffre?"); */
-	//Serial.println("entrez premier chiffre :");
 	test();
 	break;
 	
 	//second
       case 1 :
-	lcd.setCursor(0,0);
-	lcd.print("second?");
-	//	Serial.println("entrez second chiffre :");
 	test();
 	break;
 	
 	//3eme
       case 2 :
-	/* lcd.setCursor(0,0); */
-	/* lcd.print("3 eme?"); */
-	//	Serial.println("entrez 3eme chiffre :");
 	test();
 	break;
 	
@@ -136,19 +133,76 @@ void loop() {
 	if (test() == 1 ) {
 	  lcd.print("bien joue");
 	  cpt = 4;
-	  //allumer led verte /eteindre la rouge
-	  digitalWrite(ledV,HIGH);
-	  digitalWrite(ledR,LOW);
 	}
 	else {
-	  /* lcd.setCursor(0,0); */
-	  /* lcd.print("rate!"); */
-	  //Serial.println("Bien joué mais raté");
 	  cpt = 0;
 	}
 	break; 
       }
     }
+  }
+  else {
+
+    if (etat == 0) {
+      switch(cpt) {
+      case 0:
+	lcd.clear();
+	lcd.setCursor(0,0);  
+	lcd.print("1er chiffre");
+	break;
+      case 1:
+	lcd.clear();
+	lcd.setCursor(0,0);  
+	lcd.print("2eme chiffre");
+	lcd.setCursor(4,1);
+	lcd.print(code[0]);
+	break;
+      case 2:
+	lcd.clear();
+	lcd.setCursor(0,0);  
+	lcd.print("3eme chiffre");
+	lcd.setCursor(4,1);
+	lcd.print(code[0]);
+	lcd.setCursor(6,1);
+	lcd.print(code[1]);
+	break;
+      case 3:
+	lcd.clear();
+	lcd.setCursor(0,0);  
+	lcd.print("4eme chiffre");
+	lcd.setCursor(4,1);
+	lcd.print(code[0]);
+	lcd.setCursor(6,1);
+	lcd.print(code[1]);
+	lcd.setCursor(8,1);
+	lcd.print(code[2]);
+	break;
+      case 4:
+	lcd.clear();
+	lcd.setCursor(0,0);
+	lcd.print("nouveau");
+	lcd.setCursor(0,1);
+	lcd.print("code:");
+	lcd.setCursor(6,1);
+	lcd.print(code[0]);
+	lcd.setCursor(8,1);
+	lcd.print(code[1]);
+	lcd.setCursor(10,1);
+	lcd.print(code[2]);
+	lcd.setCursor(12,1);
+	lcd.print(code[3]);
+	break;
+      }
+      etat = 1;
+    }
+    
+    if (((time2-time1) > TCOMB) && (cpt < 4)) {
+      code[cpt] = val;
+      cpt++;
+      etat = 0;
+      time1 = millis();
+    }
+  }
   
   delay(50);
 }
@@ -168,12 +222,19 @@ int test() {
     time1 = millis();
     return 0;
   }
- 
+  
 } 
- 
+
 void change_etat() {
   lcd.clear() ;
   lcd.print("changement");
+  if (type == 0) {
+    type = 1;
+  }
+  else {
+    type = 0;
+  }
+  cpt = 0;
   delay(2000);
 }
  
