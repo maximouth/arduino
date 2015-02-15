@@ -5,6 +5,9 @@
 //temps pour rentrer un chiffre
 #define TCOMB 5000
 
+//pour le clear
+int etat = 0;
+
 //alimentation du potentiometre
 const int pot = 6;
 const int ledV = 2;
@@ -43,58 +46,64 @@ void loop() {
   val = map(analogRead(1),0,1023,0,9);
   time2 = millis();
   lcd.setCursor(0,2);
+  if (cpt != 4) {
   lcd.print(val);
+  }
   delay(1);
 
+  
+    switch(cpt) {
+    case 0:
+      //lcd.clear();
+      lcd.setCursor(0,0);
+      lcd.print("premier chiffre?");
+      break;
+    case 1:
+      //lcd.clear();
+      lcd.setCursor(0,0);
+      lcd.print("second?");
+      lcd.setCursor(4,1);
+      lcd.print(code[0]);
+      break;
+    case 2:
+      //lcd.clear();
+      lcd.setCursor(0,0);
+      lcd.print("3eme?");
+      lcd.setCursor(4,1);
+      lcd.print(code[0]);
+      lcd.setCursor(6,1);
+      lcd.print(code[1]);
+      break;
+    case 3:
+      lcd.setCursor(0,0);
+      lcd.print("dernier?");
+      lcd.setCursor(4,1);
+      lcd.print(code[0]);
+      lcd.setCursor(6,1);
+      lcd.print(code[1]);
+      lcd.setCursor(8,1);
+      lcd.print(code[2]);
+      break;
+      
+    case 4:
+      //lcd.clear();
+      lcd.setCursor(0,0);
+      lcd.print("ouvert!!");
+      lcd.setCursor(0,1);
+      lcd.print("code:");
+      lcd.setCursor(6,1);
+      lcd.print(code[0]);
+      lcd.setCursor(8,1);
+      lcd.print(code[1]);
+      lcd.setCursor(10,1);
+      lcd.print(code[2]);
+      lcd.setCursor(12,1);
+      lcd.print(code[3]);
+      
+      break;
+    }
 
-  switch(cpt) {
-  case 0:
-    lcd.setCursor(0,0);
-    lcd.print("premier chiffre?");
-    break;
-  case 1:
-    lcd.setCursor(0,0);
-    lcd.print("second?");
-    lcd.setCursor(4,1);
-    lcd.print(code[0]);
-    break;
-  case 2:
-    lcd.setCursor(0,0);
-    lcd.print("3eme?");
-    lcd.setCursor(4,1);
-    lcd.print(code[0]);
-    lcd.setCursor(6,1);
-    lcd.print(code[1]);
-    break;
-  case 3:
-    lcd.setCursor(0,0);
-    lcd.print("dernier?");
-    lcd.setCursor(4,1);
-    lcd.print(code[0]);
-    lcd.setCursor(6,1);
-    lcd.print(code[1]);
-    lcd.setCursor(8,1);
-    lcd.print(code[2]);
-    break;
-
-  case 4:
-    lcd.setCursor(0,0);
-    lcd.print("ouvert!!");
-    lcd.setCursor(0,1);
-    lcd.print("code:");
-    lcd.setCursor(6,1);
-    lcd.print(code[0]);
-    lcd.setCursor(8,1);
-    lcd.print(code[1]);
-    lcd.setCursor(10,1);
-    lcd.print(code[2]);
-    lcd.setCursor(12,1);
-    lcd.print(code[3]);
-    
-    break;
-  }
-
-  if ((time2-time1) > TCOMB) {
+    if ((time2-time1) > TCOMB) {
       switch (cpt) {
 	//premier chiffre
       case 0:
@@ -159,5 +168,6 @@ int test() {
     time1 = millis();
     //return 0;
   }
+ 
 } 
 
